@@ -6,7 +6,7 @@ import numpy as np
 import imageio
 import pyscreenshot
 
-def get_environment_light_info(count=1):
+def get_env_brightness_info(count=1):
 	mean_list, std_list = [], []
 	done = False
 	while not done: 
@@ -20,35 +20,39 @@ def get_environment_light_info(count=1):
 			done = True
 		except: 
 			pass
-	env_light_info = {
+	env_brightness_info = {
 		'mean': env_im.mean(), 
 		'std': env_im.std()
 	}
-	return env_light_info
+	return env_brightness_info
 
-def get_scr_light_info():
+def get_scr_brightness_info():
 	scr_im = pyscreenshot.grab()
 	scr_im = np.array(scr_im)
-	scr_light_info = {
+	scr_brightness_info = {
 		'mean': scr_im.mean(), 
 		'std': scr_im.std()
 	}
-	return scr_light_info
+	return scr_brightness_info
 
 def get_adjustment_ratio(env, scr):
-	ratio = max(0.25, min(1., (env['mean'] - 0.01*env['std']) / (scr['mean'] + scr['std'])))
+	ratio = env['mean'] + env['std']) / (scr['mean'] + 2*scr['std'])
+	if ratio < 0.2:
+		ratio = 0.2
+	if ratio > 1.:
+		ratio = 1.
 	return ratio
 
-def adjust_screen_light(ratio):
+def adjust_screen_brightness(ratio):
 	ratio = round(ratio, 1)
 	os.system('xrandr --output eDP-1-1 --brightness {0}'.format(ratio))
 
 def main():
 	while True: 
-		env = get_environment_light_info()
-		scr = get_scr_light_info()
+		env = get_env_brightness_info()
+		scr = get_scr_brightness_info()
 		ratio = get_adjustment_ratio(env, scr)
-		adjust_screen_light(ratio)
+		adjust_screen_brightness(ratio)
 		time.sleep(0.2)
 
 if __name__ == '__main__':
