@@ -36,7 +36,7 @@ def get_scr_brightness_info():
 	return scr_brightness_info
 
 def get_adjustment_ratio(env, scr):
-	ratio = env['mean'] + env['std']) / (scr['mean'] + 2*scr['std'])
+	ratio = (env['mean'] + env['std']) / (scr['mean'] + 2*scr['std'])
 	if ratio < 0.2:
 		ratio = 0.2
 	if ratio > 1.:
