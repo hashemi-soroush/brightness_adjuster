@@ -11,8 +11,10 @@ case "${1}" in
 		pip3 install numpy imageio pyscreenshot
 		;;
 	"on" )
-		python3 brightness_adjuster.py 2> /dev/null &
-		echo $! > "${pid_file_path}"
+		if [ ! -e "${pid_file_path}" ] ; then
+			python3 brightness_adjuster.py 2> /dev/null &
+			echo $! > "${pid_file_path}"
+		fi
 		;;
 	"off" )
 		if [ -e "${pid_file_path}" ] ; then
