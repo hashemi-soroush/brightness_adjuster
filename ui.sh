@@ -8,7 +8,8 @@ pid_file_path=".pid"
 
 case "${1}" in
 	"install" ) 
-		pip3 install numpy imageio pyscreenshot
+		sudo apt-get install ffmpeg python3-pip
+		sudo python3 -m pip install -r requirements.txt
 		;;
 	"on" )
 		if [ ! -e "${pid_file_path}" ] ; then
