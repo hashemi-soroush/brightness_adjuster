@@ -1,1 +1,3 @@
 .pid
+__pycache__/
+.idea/
